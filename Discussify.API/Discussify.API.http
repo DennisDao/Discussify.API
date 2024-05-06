@@ -1,0 +1,6 @@
+@Discussify.API_HostAddress = http://localhost:5057
+
+GET {{Discussify.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
