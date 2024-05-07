@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Infrastructure.Entities
 {
-    public  class RefreshToken
+    public class RefreshToken
     {
         [Key]
         public int Id { get; set; }

@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain
+namespace CommonDataContract
 {
-    public class User
+    public class JWTSettings
     {
-        public string Name { get; set; }
-        public string Avatar { get; set; }
+        public string Secret { get; set; }
     }
 }

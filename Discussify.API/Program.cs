@@ -1,6 +1,11 @@
+using CommonDataContract;
 using Discussify.API;
+using Domain.AggegratesModel.UserAggegrate;
 using Infrastructure;
 using Infrastructure.Entities;
+using Infrastructure.Repositories;
+using Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -56,8 +61,11 @@ builder.Services.AddCors(o => o.AddPolicy("AppPolicy", builder =>
 {
     builder.WithOrigins("*")
            .AllowAnyMethod()
-           .AllowAnyHeader();
+    .AllowAnyHeader();
 }));
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<Infrastructure.Services.IAuthenticationService, Infrastructure.Services.AuthenticationService>();
 
 var app = builder.Build();
 
@@ -71,13 +79,6 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AppPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
-
-
-//app.UseStaticFiles(new StaticFileOptions()
-//{
-//    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
-//    RequestPath = "/Avatars"
-//});
 
 app.UseStaticFiles();
 
