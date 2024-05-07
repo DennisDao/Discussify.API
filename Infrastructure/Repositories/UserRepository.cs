@@ -2,11 +2,7 @@
 using Domain.Exception;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
@@ -24,6 +20,10 @@ namespace Infrastructure.Repositories
         public async Task<IUser> GetUserByEmailAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
+            var post = _context.Posts
+                            .Include(x => x.Topics)
+                            .ThenInclude(x => x.TopicType)
+                            .FirstOrDefault(x => x.Id == 1);
 
             if (user == null)
             {
