@@ -1,5 +1,6 @@
 using CommonDataContract;
 using Discussify.API;
+using Domain.AggegratesModel.PostAggegrate;
 using Domain.AggegratesModel.UserAggegrate;
 using Infrastructure;
 using Infrastructure.Entities;
@@ -65,6 +66,7 @@ builder.Services.AddCors(o => o.AddPolicy("AppPolicy", builder =>
 }));
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<Infrastructure.Services.IAuthenticationService, Infrastructure.Services.AuthenticationService>();
 
 var app = builder.Build();

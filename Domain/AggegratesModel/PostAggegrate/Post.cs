@@ -22,7 +22,7 @@ namespace Domain.AggegratesModel.PostAggegrate
 
         public Post()
         {
-                
+            // Entity framework    
         }
     }
 }

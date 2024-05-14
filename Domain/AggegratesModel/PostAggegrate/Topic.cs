@@ -15,7 +15,7 @@ namespace Domain.AggegratesModel.PostAggegrate
 
         public Topic()
         {
-                
+             // Entity framework
         }
 
         public string GetDescription()
