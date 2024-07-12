@@ -28,9 +28,9 @@ namespace Discussify.API.Controllers
                 {
                     UserName = model.Email,
                     Email = model.Email,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    Avatar = model.Avatar
+                    //FirstName = model.FirstName,
+                    //LastName = model.LastName,
+                    //Avatar = model.Avatar
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -74,7 +74,7 @@ namespace Discussify.API.Controllers
 
             var avatarUrl = Url.Content($"~/Avatars/{uniqueFileName}");
 
-            user.Avatar = avatarUrl;
+            //user.Avatar = avatarUrl;
             await _userManager.UpdateAsync(user);
 
             return Ok(new { avatarUrl });

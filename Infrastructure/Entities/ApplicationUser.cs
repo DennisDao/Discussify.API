@@ -4,12 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Entities
 {
-    public class ApplicationUser : IdentityUser, IUser
+    public class ApplicationUser : IdentityUser
     {
-        [Key]
-        public string Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Avatar { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
     }
 }

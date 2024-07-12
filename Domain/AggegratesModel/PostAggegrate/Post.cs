@@ -20,7 +20,7 @@ namespace Domain.AggegratesModel.PostAggegrate
 
         public DateTime WhenUpdated { get; private set; }
 
-        public Post()
+        private Post()
         {
             // Entity framework    
         }

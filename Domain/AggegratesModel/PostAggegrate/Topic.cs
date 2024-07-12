@@ -13,9 +13,9 @@ namespace Domain.AggegratesModel.PostAggegrate
 
         public int TopicTypeId { get; private set; }
 
-        public Topic()
+        private Topic()
         {
-             // Entity framework
+            
         }
 
         public string GetDescription()

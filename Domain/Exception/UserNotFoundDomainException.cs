@@ -1,6 +1,4 @@
-﻿
-
-namespace Domain.Exception
+﻿namespace Domain.Exception
 {
     public class UserNotFoundDomainException : System.Exception
     {
