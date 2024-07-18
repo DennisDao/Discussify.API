@@ -17,38 +17,28 @@ namespace Infrastructure.Repositories
             _userManager = userManager;
         }
 
-        public Task<IUser> GetUserByEmailAsync(string email)
+        public async Task<IUser> GetUserByEmailAsync(string email)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                throw new UserNotFoundDomainException("User not found");
+            }
+
+            return user;
         }
 
-        public Task<IUser> GetUserByIdAsync(string id)
+        public async Task<IUser> GetUserByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var user = _userManager.Users.FirstOrDefault(x => x.Id == id);
+
+            if (user == null)
+            {
+                throw new UserNotFoundDomainException("User not found");
+            }
+
+            return user;
         }
-
-        //public async Task<IUser> GetUserByEmailAsync(string email)
-        //{
-        //    var user = await _userManager.FindByEmailAsync(email);
-
-        //    if (user == null)
-        //    {
-        //        throw new UserNotFoundDomainException("User not found");
-        //    }
-
-        //    return user;
-        //}
-
-        //public async Task<IUser> GetUserByIdAsync(string id)
-        //{
-        //   var user = await _userManager.FindByIdAsync(id);
-
-        //   if (user == null) 
-        //   {
-        //        throw new UserNotFoundDomainException("User not found");
-        //   }
-
-        //   return user;
-        //}
     }
 }

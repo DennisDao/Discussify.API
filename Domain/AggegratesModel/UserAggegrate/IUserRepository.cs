@@ -2,7 +2,7 @@
 {
     public interface IUserRepository
     {
-        Task<IUser> GetUserByIdAsync(string id);
+        Task<IUser> GetUserByIdAsync(int id);
 
         Task<IUser> GetUserByEmailAsync(string email);
     }

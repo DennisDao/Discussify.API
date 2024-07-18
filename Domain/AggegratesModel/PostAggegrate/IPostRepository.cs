@@ -9,5 +9,7 @@ namespace Domain.AggegratesModel.PostAggegrate
     public interface IPostRepository
     {
         IEnumerable<Post> GetLatestPost();
+
+        void AddPost(Post post);
     }
 }

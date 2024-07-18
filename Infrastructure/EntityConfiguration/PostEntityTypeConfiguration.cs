@@ -12,22 +12,22 @@ namespace Infrastructure.EntityConfiguration
 {
     internal class PostEntityTypeConfiguration : IEntityTypeConfiguration<Post>
     {
-        public void Configure(EntityTypeBuilder<Post> buyerConfiguration)
+        public void Configure(EntityTypeBuilder<Post> postConfiguration)
         {
-            buyerConfiguration.ToTable("posts");
+            postConfiguration.ToTable("posts");
 
-            buyerConfiguration.Ignore(b => b.DomainEvents);
+            postConfiguration.Ignore(b => b.DomainEvents);
 
-            buyerConfiguration.Property(b => b.Id)
+            postConfiguration.Property(b => b.Id)
                 .UseHiLo("postseq");
 
-            buyerConfiguration.Property(b => b.Id)
+            postConfiguration.Property(b => b.Id)
                 .HasMaxLength(200);
 
-            buyerConfiguration.HasIndex("Id")
+            postConfiguration.HasIndex("Id")
                 .IsUnique(true);
 
-            buyerConfiguration.HasMany(b => b.Topics)
+            postConfiguration.HasMany(b => b.Topics)
                 .WithOne();
         }
     }

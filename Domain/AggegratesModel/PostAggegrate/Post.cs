@@ -6,7 +6,7 @@ namespace Domain.AggegratesModel.PostAggegrate
 {
     public class Post : Entity, IAggregateRoot
     {
-        public string UserId { get; private set; }
+        public int UserId { get; private set; }
 
         public string Title { get; private set; }
 
@@ -22,7 +22,26 @@ namespace Domain.AggegratesModel.PostAggegrate
 
         private Post()
         {
-            // Entity framework    
+            
+        }
+
+        public static Post Create(int userId, string title, string description, IEnumerable<Topic> topics)
+        {
+            return new Post
+            {
+                UserId = userId,
+                Title = title,
+                Description = description,
+                Topics = topics,
+                WhenCreated = DateTime.UtcNow,
+                WhenUpdated = DateTime.UtcNow,
+            };
+        }
+
+        public void ChangeImage(string imageUrl)
+        {
+            ImageUrl = imageUrl;
+            WhenUpdated = DateTime.UtcNow;
         }
     }
 }

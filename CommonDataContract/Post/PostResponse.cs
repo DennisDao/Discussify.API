@@ -7,7 +7,7 @@ namespace CommonDataContract.Post
 
         public string AuthorImageUrl { get; set; }
 
-        public string AuthorId { get; set; }
+        public int AuthorId { get; set; }
 
         public List<string> Tags { get; set; }
 

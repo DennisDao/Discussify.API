@@ -1,5 +1,6 @@
 using CommonDataContract;
 using Discussify.API;
+using Discussify.API.Service;
 using Domain.AggegratesModel.PostAggegrate;
 using Domain.AggegratesModel.UserAggegrate;
 using Infrastructure;
@@ -22,7 +23,7 @@ var connectionString = builder.Configuration.GetConnectionString("ApplicationCon
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(connectionString));
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -85,5 +86,7 @@ app.UseAuthorization();
 app.UseStaticFiles();
 
 app.MapControllers();
+
+app.Seed();
 
 app.Run();

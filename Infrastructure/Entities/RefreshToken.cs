@@ -20,7 +20,7 @@ namespace Infrastructure.Entities
 
         public DateTime WhenExpire { get; set; }
 
-        public string UserId { get; set; }
+        public int UserId { get; set; }
 
         [ForeignKey(nameof(UserId))]
         public ApplicationUser User { get; set; }

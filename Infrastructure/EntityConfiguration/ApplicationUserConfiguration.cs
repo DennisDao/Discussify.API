@@ -18,10 +18,6 @@ namespace Infrastructure.EntityConfiguration
         {
             // Primary key
             builder.HasKey(x => x.Id);
-
-            builder.HasOne(x => x.User)
-                   .WithOne()
-                   .HasForeignKey<ApplicationUser>(x => x.UserId);
         }
     }
 }
