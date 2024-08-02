@@ -1,6 +1,9 @@
 ﻿using Domain.Exception;
 using Discussify.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Infrastructure.Services;
+using Microsoft.AspNetCore.Hosting.Server;
+using Discussify.API.Extensions;
 
 namespace Discussify.API.Controllers
 {
@@ -8,11 +11,13 @@ namespace Discussify.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly Infrastructure.Services.IAuthenticationService _authenticationSerive;
+        private readonly IAuthenticationService _authenticationSerive;
+        private readonly IServer _server;
 
-        public AuthController(Infrastructure.Services.IAuthenticationService authenticationService)
+        public AuthController(IAuthenticationService authenticationService, IServer server)
         {
             _authenticationSerive = authenticationService;
+            _server = server;
         }
 
         [HttpPost("login")]
@@ -25,6 +30,7 @@ namespace Discussify.API.Controllers
             try
             {
                 var authResponse = await _authenticationSerive.Login(model.Email, model.Password);
+                authResponse.Avatar = $"{_server.GetHostUrl()}{authResponse.Avatar}";
                 return Ok(authResponse);
             }
             catch(UserNotFoundDomainException ex)

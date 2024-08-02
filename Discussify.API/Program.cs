@@ -1,18 +1,13 @@
+using Application.Posts;
 using CommonDataContract;
-using Discussify.API;
-using Discussify.API.Service;
-using Domain.AggegratesModel.PostAggegrate;
 using Domain.AggegratesModel.UserAggegrate;
 using Infrastructure;
 using Infrastructure.Entities;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -68,7 +63,8 @@ builder.Services.AddCors(o => o.AddPolicy("AppPolicy", builder =>
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
-builder.Services.AddScoped<Infrastructure.Services.IAuthenticationService, Infrastructure.Services.AuthenticationService>();
+builder.Services.AddScoped<PostService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 var app = builder.Build();
 
@@ -87,6 +83,6 @@ app.UseStaticFiles();
 
 app.MapControllers();
 
-app.Seed();
+//app.Seed();
 
 app.Run();

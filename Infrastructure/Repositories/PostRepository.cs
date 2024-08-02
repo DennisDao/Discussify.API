@@ -1,11 +1,5 @@
-﻿using Domain.AggegratesModel.PostAggegrate;
-using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.Posts;
+using Domain.AggegratesModel.PostAggegrate;
 
 namespace Infrastructure.Repositories
 {
@@ -19,14 +13,34 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
+        public void AddPost(Post post)
+        {
+           _context.Posts.Add(post);
+        }
+
+        public IEnumerable<Category> GetAllCategories()
+        {
+            return _context.Categories;
+        }
+
         public IEnumerable<Post> GetLatestPost()
         {
             var post = _context.Posts
-                .Include(x => x.Topics)
-                .ThenInclude(x => x.TopicType)
+                //.Include(x => x.Topics)
+                //.ThenInclude(x => x.TopicType)
                 .Take(TAKE_LIMIT);
 
             return post;
+        }
+
+        public Post GetPostById(int postId)
+        {
+            return _context.Posts.FirstOrDefault(x => x.Id == postId);
+        }
+
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
         }
     }
 }

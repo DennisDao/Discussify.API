@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,8 +29,17 @@ namespace Infrastructure.EntityConfiguration
             postConfiguration.HasIndex("Id")
                 .IsUnique(true);
 
-            postConfiguration.HasMany(b => b.Topics)
-                .WithOne();
+            // Junction table
+            postConfiguration.HasMany(s => s.Tags)
+                             .WithMany(s => s.Posts)
+                             .UsingEntity(j => j.ToTable("post_tags"));
+
+            //postConfiguration.HasOne<Category>()
+            //                 .WithMany()
+            //                 //.HasForeignKey(p => p.CategoryId)
+            //                 //.HasConstraintName("CategoryId")
+            //                 .OnDelete(DeleteBehavior.NoAction);
+
         }
     }
 }

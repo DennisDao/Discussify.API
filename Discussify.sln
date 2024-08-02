@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{BE40D438-98C7-4B54-8CDA-A5A57A370E83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonDataContract", "CommonDataContract\CommonDataContract.csproj", "{E1EA7284-2404-4839-AAE1-1BBA65B0502B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonDataContract", "CommonDataContract\CommonDataContract.csproj", "{E1EA7284-2404-4839-AAE1-1BBA65B0502B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{D9C72A7D-A036-45C8-917E-758890CCA74A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{E1EA7284-2404-4839-AAE1-1BBA65B0502B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1EA7284-2404-4839-AAE1-1BBA65B0502B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1EA7284-2404-4839-AAE1-1BBA65B0502B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9C72A7D-A036-45C8-917E-758890CCA74A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9C72A7D-A036-45C8-917E-758890CCA74A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9C72A7D-A036-45C8-917E-758890CCA74A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9C72A7D-A036-45C8-917E-758890CCA74A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -12,11 +12,11 @@ namespace Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateSequence(
-                name: "postseq",
+                name: "categories_seq",
                 incrementBy: 10);
 
             migrationBuilder.CreateSequence(
-                name: "topiseq",
+                name: "postseq",
                 incrementBy: 10);
 
             migrationBuilder.CreateTable(
@@ -66,32 +66,30 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "posts",
+                name: "categories",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", maxLength: 200, nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhenCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     WhenUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_posts", x => x.Id);
+                    table.PrimaryKey("PK_categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "topic_type",
+                name: "Tags",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", maxLength: 200, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_topic_type", x => x.Id);
+                    table.PrimaryKey("PK_Tags", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -225,25 +223,49 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "topics",
+                name: "posts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", maxLength: 200, nullable: false),
-                    TopicTypeId = table.Column<int>(type: "int", nullable: false),
-                    PostId = table.Column<int>(type: "int", nullable: true)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WhenCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    WhenUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_topics", x => x.Id);
+                    table.PrimaryKey("PK_posts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_topics_posts_PostId",
-                        column: x => x.PostId,
+                        name: "FK_posts_categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "post_tags",
+                columns: table => new
+                {
+                    PostsId = table.Column<int>(type: "int", nullable: false),
+                    TagsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_post_tags", x => new { x.PostsId, x.TagsId });
+                    table.ForeignKey(
+                        name: "FK_post_tags_Tags_TagsId",
+                        column: x => x.TagsId,
+                        principalTable: "Tags",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_post_tags_posts_PostsId",
+                        column: x => x.PostsId,
                         principalTable: "posts",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_topics_topic_type_TopicTypeId",
-                        column: x => x.TopicTypeId,
-                        principalTable: "topic_type",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -288,6 +310,16 @@ namespace Infrastructure.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_post_tags_TagsId",
+                table: "post_tags",
+                column: "TagsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_posts_CategoryId",
+                table: "posts",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_posts_Id",
                 table: "posts",
                 column: "Id",
@@ -297,28 +329,6 @@ namespace Infrastructure.Migrations
                 name: "IX_RefreshTokens_UserId",
                 table: "RefreshTokens",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_topic_type_Id",
-                table: "topic_type",
-                column: "Id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_topics_Id",
-                table: "topics",
-                column: "Id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_topics_PostId",
-                table: "topics",
-                column: "PostId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_topics_TopicTypeId",
-                table: "topics",
-                column: "TopicTypeId");
         }
 
         /// <inheritdoc />
@@ -340,28 +350,31 @@ namespace Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "RefreshTokens");
+                name: "post_tags");
 
             migrationBuilder.DropTable(
-                name: "topics");
+                name: "RefreshTokens");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "posts");
 
             migrationBuilder.DropTable(
-                name: "topic_type");
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "categories");
+
+            migrationBuilder.DropSequence(
+                name: "categories_seq");
 
             migrationBuilder.DropSequence(
                 name: "postseq");
-
-            migrationBuilder.DropSequence(
-                name: "topiseq");
         }
     }
 }

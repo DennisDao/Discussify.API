@@ -22,11 +22,35 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.HasSequence("categories_seq")
+                .IncrementsBy(10);
+
             modelBuilder.HasSequence("postseq")
                 .IncrementsBy(10);
 
-            modelBuilder.HasSequence("topiseq")
-                .IncrementsBy(10);
+            modelBuilder.Entity("Domain.AggegratesModel.PostAggegrate.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(200)
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "categories_seq");
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("WhenCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("WhenUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("categories", (string)null);
+                });
 
             modelBuilder.Entity("Domain.AggegratesModel.PostAggegrate.Post", b =>
                 {
@@ -36,6 +60,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "postseq");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -60,58 +87,29 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("Id")
                         .IsUnique();
 
                     b.ToTable("posts", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.AggegratesModel.PostAggegrate.Topic", b =>
+            modelBuilder.Entity("Domain.AggegratesModel.PostAggegrate.Tag", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(200)
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "topiseq");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("PostId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TopicTypeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Id")
-                        .IsUnique();
-
-                    b.HasIndex("PostId");
-
-                    b.HasIndex("TopicTypeId");
-
-                    b.ToTable("topics", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.AggegratesModel.PostAggegrate.TopicType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(200)
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "topiseq");
-
-                    b.Property<string>("Description")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Id")
-                        .IsUnique();
-
-                    b.ToTable("topic_type", (string)null);
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.ApplicationRole", b =>
@@ -369,19 +367,30 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.AggegratesModel.PostAggegrate.Topic", b =>
+            modelBuilder.Entity("PostTag", b =>
                 {
-                    b.HasOne("Domain.AggegratesModel.PostAggegrate.Post", null)
-                        .WithMany("Topics")
-                        .HasForeignKey("PostId");
+                    b.Property<int>("PostsId")
+                        .HasColumnType("int");
 
-                    b.HasOne("Domain.AggegratesModel.PostAggegrate.TopicType", "TopicType")
+                    b.Property<int>("TagsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PostsId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("post_tags", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.AggegratesModel.PostAggegrate.Post", b =>
+                {
+                    b.HasOne("Domain.AggegratesModel.PostAggegrate.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("TopicTypeId")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("TopicType");
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.RefreshToken", b =>
@@ -446,9 +455,19 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.AggegratesModel.PostAggegrate.Post", b =>
+            modelBuilder.Entity("PostTag", b =>
                 {
-                    b.Navigation("Topics");
+                    b.HasOne("Domain.AggegratesModel.PostAggegrate.Post", null)
+                        .WithMany()
+                        .HasForeignKey("PostsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.AggegratesModel.PostAggegrate.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

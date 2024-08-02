@@ -19,7 +19,7 @@ namespace Infrastructure.Repositories
 
         public async Task<IUser> GetUserByEmailAsync(string email)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = _userManager.Users.FirstOrDefault(x => x.Email == email);
 
             if (user == null)
             {
