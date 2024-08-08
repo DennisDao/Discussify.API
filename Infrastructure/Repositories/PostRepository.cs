@@ -1,5 +1,6 @@
 ﻿using Application.Posts;
 using Domain.AggegratesModel.PostAggegrate;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
@@ -18,6 +19,12 @@ namespace Infrastructure.Repositories
            _context.Posts.Add(post);
         }
 
+        public void AddTag(Post post, Tag tag)
+        {
+            post.AddTags(tag);
+            SaveChanges();
+        }
+
         public IEnumerable<Category> GetAllCategories()
         {
             return _context.Categories;
@@ -26,8 +33,7 @@ namespace Infrastructure.Repositories
         public IEnumerable<Post> GetLatestPost()
         {
             var post = _context.Posts
-                //.Include(x => x.Topics)
-                //.ThenInclude(x => x.TopicType)
+                .Include(x => x.Tags)
                 .Take(TAKE_LIMIT);
 
             return post;

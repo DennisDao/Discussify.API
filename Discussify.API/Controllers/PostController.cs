@@ -37,6 +37,7 @@ namespace Discussify.API.Controllers
                     PostResponse p = new PostResponse()
                     {
                         Title = post.Title,
+                        Description = post.Description,
                         ImageUrl = $"{_server.GetHostUrl()}{post.ImageUrl}",
                         AuthorImageUrl = $"{_server.GetHostUrl()}{author.Avatar}",
                         AuthorId = post.UserId,
@@ -61,12 +62,18 @@ namespace Discussify.API.Controllers
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> CreatePost([FromBody] CreatePostRequest request)
+        public async Task<IActionResult> CreatePost([FromBody] PostCreateRequest request)
         {
-            _postService.CreatePost(request.UserId, request.Title, request.Description);
-           
+            _postService.CreatePost(request.UserId, request.Title, request.Description, request.CategoryId, request.Tags.ToArray());
             return Ok();
         }
+
+        //[HttpPost("SetTags")]
+        //public async Task<IActionResult> SetTag([FromBody] PostCreateRequest request)
+        //{
+        //    _postService.CreatePost(request.UserId, request.Title, request.Description);
+        //    return Ok();
+        //}
 
         [HttpPost("UploadImage")]
         public async Task<IActionResult> UploadImage(IFormFile image, int postId)

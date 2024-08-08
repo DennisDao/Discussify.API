@@ -15,6 +15,8 @@ namespace CommonDataContract.Post
 
         public string AuthorName { get; set; }
 
+        public string Description { get; set; }
+
         public string AuthorLastName { get; set; }
 
         public int TotalViews { get; set; }

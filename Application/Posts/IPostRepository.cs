@@ -12,6 +12,9 @@ namespace Application.Posts
 
         Post GetPostById (int postId);
 
+        /// <summary>Add a tag to a post  </summary>
+        void AddTag(Post post, Tag tag);
+
         /// <summary> Add a new post</summary>
         void AddPost(Post post);
 
