@@ -41,7 +41,9 @@ namespace Infrastructure.Repositories
 
         public Post GetPostById(int postId)
         {
-            return _context.Posts.FirstOrDefault(x => x.Id == postId);
+            return _context.Posts
+                    .Include(x => x.Comments)
+                    .FirstOrDefault(x => x.Id == postId);
         }
 
         public void SaveChanges()

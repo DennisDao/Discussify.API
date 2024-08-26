@@ -6,13 +6,17 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class update_1 : Migration
+    public partial class update_2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateSequence(
                 name: "categories_seq",
+                incrementBy: 10);
+
+            migrationBuilder.CreateSequence(
+                name: "comment_seq",
                 incrementBy: 10);
 
             migrationBuilder.CreateSequence(
@@ -247,6 +251,29 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "comments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", maxLength: 200, nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    PostId = table.Column<int>(type: "int", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    WhenCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    WhenUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_comments_posts_PostId",
+                        column: x => x.PostId,
+                        principalTable: "posts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "post_tags",
                 columns: table => new
                 {
@@ -310,6 +337,17 @@ namespace Infrastructure.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_comments_Id",
+                table: "comments",
+                column: "Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_comments_PostId",
+                table: "comments",
+                column: "PostId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_post_tags_TagsId",
                 table: "post_tags",
                 column: "TagsId");
@@ -350,6 +388,9 @@ namespace Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "comments");
+
+            migrationBuilder.DropTable(
                 name: "post_tags");
 
             migrationBuilder.DropTable(
@@ -372,6 +413,9 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropSequence(
                 name: "categories_seq");
+
+            migrationBuilder.DropSequence(
+                name: "comment_seq");
 
             migrationBuilder.DropSequence(
                 name: "postseq");

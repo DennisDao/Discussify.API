@@ -3,6 +3,7 @@ using CommonDataContract.Extension;
 using CommonDataContract.Post;
 using Discussify.API.DTOs.Post;
 using Discussify.API.Extensions;
+using Domain.AggegratesModel.PostAggegrate;
 using Domain.AggegratesModel.UserAggegrate;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
@@ -26,16 +27,17 @@ namespace Discussify.API.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Get()
         {
-            List<PostResponse> postReponse = new List<PostResponse>();
+            List<PostListingResponse> postReponse = new List<PostListingResponse>();
             try
             {
-                var latestPost = _postService.GetLatestPost();
+                var latestPost = _postService.GetLatestPost().OrderByDescending(x => x.WhenCreated);
 
                 foreach (var post in latestPost)
                 {
                     var author = await _userRepository.GetUserByIdAsync(post.UserId);
-                    PostResponse p = new PostResponse()
+                    PostListingResponse p = new PostListingResponse()
                     {
+                        PostId = post.Id,
                         Title = post.Title,
                         Description = post.Description,
                         ImageUrl = $"{_server.GetHostUrl()}{post.ImageUrl}",
@@ -61,11 +63,64 @@ namespace Discussify.API.Controllers
             return Ok(postReponse);
         }
 
+        [HttpGet("{postId}")]
+        public async Task<IActionResult> Get(int postId)
+        {
+            try
+            {
+                var post = _postService.GetPost(postId);
+
+                PostResponse postResponse = new PostResponse();
+                postResponse.UserId = post.UserId;
+                postResponse.PostId = post.Id;
+                postResponse.Title = post.Title;
+                postResponse.Description = post.Description;
+                postResponse.ImageUrl = $"{_server.GetHostUrl()}{post.ImageUrl}";
+
+                foreach (var c in post.Comments)
+                {
+                    var author = await _userRepository.GetUserByIdAsync(c.UserId); 
+                    var postComment = new PostComment();
+                    postComment.CommentId = c.Id;
+                    postComment.PostId = post.Id;
+                    postComment.UserId = c.UserId;
+                    postComment.WhenCreated = c.WhenCreated.ToElaspedTime(); ;
+                    postComment.AuthorImageUrl = $"{_server.GetHostUrl()}{author.Avatar}";
+                    postComment.Content = c.Content;
+
+                    postResponse.Comments.Add(postComment);
+                }
+
+
+                return Ok(postResponse);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Oops!");
+            }
+
+            return Ok(null);
+        }
+
         [HttpPost("")]
         public async Task<IActionResult> CreatePost([FromBody] PostCreateRequest request)
         {
-            _postService.CreatePost(request.UserId, request.Title, request.Description, request.CategoryId, request.Tags.ToArray());
-            return Ok();
+            var post = _postService.CreatePost(request.UserId, request.Title, request.Description, request.CategoryId, request.Tags.ToArray());
+            return Ok(new { PostId = post.Id, Message = "Post created successfully." });
+        }
+
+        [HttpPost("Comment")]
+        public async Task<IActionResult> Comment([FromBody] NewCommentRequest request)
+        {
+            var isCommentAdded = _postService.AddComment(request.PostId, request.UserId, request.Comment);
+            if(isCommentAdded)
+            {
+                return Ok(new { Message = "Comment created successfully." });
+            }
+            else
+            {
+                return BadRequest(new { Message = "Unable to add comment" });
+            }
         }
 
         //[HttpPost("SetTags")]

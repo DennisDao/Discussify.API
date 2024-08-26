@@ -1,4 +1,5 @@
 ﻿using Discussify.API.Models;
+using Domain.AggegratesModel.UserAggegrate;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -24,21 +25,13 @@ namespace Discussify.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser
-                {
-                    UserName = model.Email,
-                    //Email = model.Email,
-                    //FirstName = model.FirstName,
-                    //LastName = model.LastName,
-                    //Avatar = model.Avatar
-                };
+                var user = ApplicationUser.Create(model.FirstName, model.LastName,model.Email);
 
                 var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return Ok(new { Message = "Registration successful" });
+                    return Ok(new { UserId = user.Id, Message = "Registration successful" });
                 }
 
                 foreach (var error in result.Errors)
@@ -71,10 +64,9 @@ namespace Discussify.API.Controllers
             {
                 await avatar.CopyToAsync(fileStream);
             }
-
+            
             var avatarUrl = Url.Content($"~/Avatars/{uniqueFileName}");
-
-            //user.Avatar = avatarUrl;
+            user.Avatar = avatarUrl;
             await _userManager.UpdateAsync(user);
 
             return Ok(new { avatarUrl });

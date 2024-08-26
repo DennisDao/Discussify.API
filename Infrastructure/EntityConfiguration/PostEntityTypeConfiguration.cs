@@ -34,6 +34,8 @@ namespace Infrastructure.EntityConfiguration
                              .WithMany(s => s.Posts)
                              .UsingEntity(j => j.ToTable("post_tags"));
 
+            postConfiguration.HasMany(s => s.Comments);
+
             //postConfiguration.HasOne<Category>()
             //                 .WithMany()
             //                 //.HasForeignKey(p => p.CategoryId)

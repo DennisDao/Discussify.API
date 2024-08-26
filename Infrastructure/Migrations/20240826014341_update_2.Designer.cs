@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240719013635_update_1")]
-    partial class update_1
+    [Migration("20240826014341_update_2")]
+    partial class update_2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,6 +26,9 @@ namespace Infrastructure.Migrations
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.HasSequence("categories_seq")
+                .IncrementsBy(10);
+
+            modelBuilder.HasSequence("comment_seq")
                 .IncrementsBy(10);
 
             modelBuilder.HasSequence("postseq")
@@ -53,6 +56,44 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("categories", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.AggegratesModel.PostAggegrate.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(200)
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "comment_seq");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("WhenCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("WhenUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("comments", (string)null);
                 });
 
             modelBuilder.Entity("Domain.AggegratesModel.PostAggegrate.Post", b =>
@@ -385,6 +426,15 @@ namespace Infrastructure.Migrations
                     b.ToTable("post_tags", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.AggegratesModel.PostAggegrate.Comment", b =>
+                {
+                    b.HasOne("Domain.AggegratesModel.PostAggegrate.Post", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.AggegratesModel.PostAggegrate.Post", b =>
                 {
                     b.HasOne("Domain.AggegratesModel.PostAggegrate.Category", "Category")
@@ -471,6 +521,11 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.AggegratesModel.PostAggegrate.Post", b =>
+                {
+                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

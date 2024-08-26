@@ -1,8 +1,10 @@
 ﻿
 namespace CommonDataContract.Post
 {
-    public class PostResponse
+    public class PostListingResponse
     {
+        public int PostId { get; set; }
+
         public string ImageUrl { get; set; }
 
         public string AuthorImageUrl { get; set; }

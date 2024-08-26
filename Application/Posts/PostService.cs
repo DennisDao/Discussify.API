@@ -23,14 +23,14 @@ namespace Application.Posts
             return _postRepository.GetLatestPost().ToList();
         }
 
-        public void CreatePost(int userId, string title, string description, int categoryId, string[] tags)
+        public Post CreatePost(int userId, string title, string description, int categoryId, string[] tags)
         {
             var category = _postRepository
                 .GetAllCategories()
                 .FirstOrDefault(x => x.Id == categoryId);
 
             var post = Post.Create(userId, title, description);
-            post.ChangeImage("test");
+            post.ChangeImage("");
             post.SetCategory(category);
 
             _postRepository.AddPost(post);
@@ -42,12 +42,28 @@ namespace Application.Posts
                 _postRepository.AddTag(post, newTag);
             }
 
-           
+            return post;
         }
 
         public Post GetPost(int postId)
         {
             return _postRepository.GetPostById(postId);
+        }
+
+        public bool AddComment(int postId, int userId, string content)
+        {
+            try
+            {
+                var post = _postRepository.GetPostById(postId);
+                var comment = Comment.Create(userId, postId, content);
+                post.AddComment(comment);
+                Save();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }     
         }
 
         public IEnumerable<Category> GetAllCategories()

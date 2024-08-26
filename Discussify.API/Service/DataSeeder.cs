@@ -17,7 +17,7 @@ namespace Discussify.API.Service
                 var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
                 var user = ApplicationUser.Create("Dennis", "Dao", "test@email.com");
-
+                
                 var result = await userManager.CreateAsync(user, "Password123$");
 
                 var category1 = Category.Create("Javascript");
@@ -44,7 +44,14 @@ namespace Discussify.API.Service
                 post.AddTags(tag1);
                 post.AddTags(tag2);
 
-               
+                context.Update(post);
+                context.SaveChanges();
+
+                string jsonString = "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]";
+
+                var comment = Comment.Create(user.Id, post.Id, jsonString);
+
+                post.AddComment(comment);
                 context.Update(post);
                 context.SaveChanges();
             }

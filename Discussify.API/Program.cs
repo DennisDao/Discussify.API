@@ -1,5 +1,6 @@
 using Application.Posts;
 using CommonDataContract;
+using Discussify.API.Service;
 using Domain.AggegratesModel.UserAggegrate;
 using Infrastructure;
 using Infrastructure.Entities;

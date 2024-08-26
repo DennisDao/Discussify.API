@@ -9,7 +9,7 @@ namespace Infrastructure.Entities
         public int Id { get; private set; }
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
-        public string Avatar { get; private set; }
+        public string Avatar { get; set; }
         public string Email { get; private set; }
         public DateTime WhenCreated { get; private set; }
         public DateTime WhenUpdated { get; private set; }

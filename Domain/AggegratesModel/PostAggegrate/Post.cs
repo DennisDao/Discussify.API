@@ -8,6 +8,9 @@ namespace Domain.AggegratesModel.PostAggegrate
     public class Post : Entity, IAggregateRoot
     {
         private readonly List<Tag> _tags = new List<Tag>();
+
+        private readonly List<Comment> _comments = new List<Comment>();
+
         public int UserId { get; private set; }
         public string Title { get; private set; }
         public string Description { get; private set; }
@@ -16,6 +19,7 @@ namespace Domain.AggegratesModel.PostAggegrate
         public DateTime WhenUpdated { get; private set; }
         public Category Category { get; private set; }
         public IEnumerable<Tag> Tags { get { return _tags; } }
+        public IEnumerable<Comment> Comments { get { return _comments; } }
 
         private Post()
         {
@@ -49,6 +53,11 @@ namespace Domain.AggegratesModel.PostAggegrate
         public void AddTags(Tag tag)
         {
             _tags.Add(tag);
+        }
+
+        public void AddComment(Comment comment)
+        {
+            _comments.Add(comment);
         }
     }
 }
