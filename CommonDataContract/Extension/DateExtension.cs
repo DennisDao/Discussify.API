@@ -15,7 +15,7 @@ namespace CommonDataContract.Extension
             if (elapsedTime.Days >= 1) 
                 return  $"{elapsedTime.Days} {(elapsedTime.Days > 1 ? "days" : "day")} ago"; 
             if (elapsedTime.TotalHours >= 1) 
-                return $"{elapsedTime.Days} {(elapsedTime.Hours > 1 ? "hours" : "hour")} ago";
+                return $"{elapsedTime.Hours} {(elapsedTime.Hours > 1 ? "hours" : "hour")} ago";
             if (elapsedTime.TotalMinutes >= 1) 
                 return $"{elapsedTime.Minutes} {(elapsedTime.Minutes > 1 ? "minutes" : "minute")} ago";
 

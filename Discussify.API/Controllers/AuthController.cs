@@ -30,7 +30,7 @@ namespace Discussify.API.Controllers
             try
             {
                 var authResponse = await _authenticationSerive.Login(model.Email, model.Password);
-                authResponse.Avatar = $"{_server.GetHostUrl()}{authResponse.Avatar}";
+                authResponse.Avatar = $"{_server.GetHostUrl()}/Avatars/{authResponse.Avatar}";
                 return Ok(authResponse);
             }
             catch(UserNotFoundDomainException ex)

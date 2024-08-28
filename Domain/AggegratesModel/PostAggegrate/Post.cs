@@ -14,7 +14,7 @@ namespace Domain.AggegratesModel.PostAggegrate
         public int UserId { get; private set; }
         public string Title { get; private set; }
         public string Description { get; private set; }
-        public string ImageUrl { get; private set; }
+        public string Image { get; private set; }
         public DateTime WhenCreated { get; private set; }
         public DateTime WhenUpdated { get; private set; }
         public Category Category { get; private set; }
@@ -38,9 +38,9 @@ namespace Domain.AggegratesModel.PostAggegrate
             };
         }
 
-        public void ChangeImage(string imageUrl)
+        public void ChangeImage(string image)
         {
-            ImageUrl = imageUrl;
+            Image = image;
             WhenUpdated = DateTime.UtcNow;
         }
 

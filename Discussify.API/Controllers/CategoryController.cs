@@ -1,9 +1,7 @@
 ﻿using Application.Posts;
-using CommonDataContract.Extension;
-using CommonDataContract.Post;
 using Discussify.API.DTOs.Categories;
+using Discussify.API.Extensions;
 using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Discussify.API.Controllers
@@ -13,9 +11,11 @@ namespace Discussify.API.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly PostService _postService;
-        public CategoryController(PostService postService)
+        private readonly IServer _server;
+        public CategoryController(PostService postService, IServer server)
         {
-            _postService = postService;     
+            _postService = postService;
+            _server = server;
         }
 
         [HttpGet("")]
@@ -31,8 +31,10 @@ namespace Discussify.API.Controllers
                     categoryResponse.Add(new CategoriesResponse()
                     {
                         CategoryName = category.CategoryName,
+                        Image = $"{_server.GetHostUrl()}/Images/Categories/{category.Image}",
+                        Description = category.Description,
                         Id = category.Id
-                    });
+                    }); 
                 }
             }
             catch (Exception ex)

@@ -40,13 +40,13 @@ namespace Discussify.API.Controllers
                         PostId = post.Id,
                         Title = post.Title,
                         Description = post.Description,
-                        ImageUrl = $"{_server.GetHostUrl()}{post.ImageUrl}",
-                        AuthorImageUrl = $"{_server.GetHostUrl()}{author.Avatar}",
+                        ImageUrl = $"{_server.GetHostUrl()}/Post/{post.Image}",
+                        AuthorImageUrl = $"{_server.GetHostUrl()}/Avatars/{author.Avatar}",
                         AuthorId = post.UserId,
                         Tags = post.Tags.Select(x => x.Name).ToList(),
                         AuthorName = author.FirstName,
                         AuthorLastName = author.LastName,
-                        TotalComments = 0,
+                        TotalComments = post.Comments.Count(),
                         TotalLikes = 0,
                         TotalViews = 0,
                         WhenCreated = post.WhenCreated.ToElaspedTime()
@@ -75,7 +75,7 @@ namespace Discussify.API.Controllers
                 postResponse.PostId = post.Id;
                 postResponse.Title = post.Title;
                 postResponse.Description = post.Description;
-                postResponse.ImageUrl = $"{_server.GetHostUrl()}{post.ImageUrl}";
+                postResponse.ImageUrl = $"{_server.GetHostUrl()}{post.Image}";
 
                 foreach (var c in post.Comments)
                 {
@@ -84,6 +84,7 @@ namespace Discussify.API.Controllers
                     postComment.CommentId = c.Id;
                     postComment.PostId = post.Id;
                     postComment.UserId = c.UserId;
+                    postComment.AuthorName = author.FirstName;
                     postComment.WhenCreated = c.WhenCreated.ToElaspedTime(); ;
                     postComment.AuthorImageUrl = $"{_server.GetHostUrl()}{author.Avatar}";
                     postComment.Content = c.Content;

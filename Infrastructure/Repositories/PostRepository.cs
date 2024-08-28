@@ -34,6 +34,7 @@ namespace Infrastructure.Repositories
         {
             var post = _context.Posts
                 .Include(x => x.Tags)
+                .Include(x => x.Comments)
                 .Take(TAKE_LIMIT);
 
             return post;

@@ -9,7 +9,7 @@ namespace Infrastructure.Entities
         public int Id { get; private set; }
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
-        public string Avatar { get; set; }
+        public string Avatar { get; private set; }
         public string Email { get; private set; }
         public DateTime WhenCreated { get; private set; }
         public DateTime WhenUpdated { get; private set; }
@@ -22,10 +22,15 @@ namespace Infrastructure.Entities
                 FirstName = firstName,
                 LastName = lastName,
                 Email = email,
-                Avatar = "test", // Fix this avatar should be optional
+                Avatar = "", // Fix this avatar should be optional
                 WhenCreated = DateTime.UtcNow,
                 WhenUpdated = DateTime.UtcNow 
             };
+        }
+
+        public void ChangeAvatar(string avatar)
+        {
+            Avatar = avatar;
         }
 
         public static User ToDomainUser(IUser user)
