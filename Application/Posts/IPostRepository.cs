@@ -7,6 +7,9 @@ namespace Application.Posts
         /// <summary> Returns the latest posts </summary>
         IEnumerable<Post> GetLatestPost();
 
+        /// <summary> Returns all post that match the search query </summary>
+        IEnumerable<Post> GetPostByQuery(string query);
+
         /// <summary> Returns all avaliable category </summary>
         IEnumerable<Category> GetAllCategories();
 

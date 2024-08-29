@@ -47,6 +47,11 @@ namespace Infrastructure.Repositories
                     .FirstOrDefault(x => x.Id == postId);
         }
 
+        public IEnumerable<Post> GetPostByQuery(string query)
+        {
+            return _context.Posts.Where(x => x.Title.StartsWith(query) || x.Title.Contains(query));
+        }
+
         public void SaveChanges()
         {
             _context.SaveChanges();

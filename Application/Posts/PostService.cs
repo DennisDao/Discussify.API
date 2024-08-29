@@ -23,6 +23,11 @@ namespace Application.Posts
             return _postRepository.GetLatestPost().ToList();
         }
 
+        public IEnumerable<Post> GetPostByQuery(string query)
+        {
+            return _postRepository.GetPostByQuery(query).ToList();
+        }
+
         public Post CreatePost(int userId, string title, string description, int categoryId, string[] tags)
         {
             var category = _postRepository

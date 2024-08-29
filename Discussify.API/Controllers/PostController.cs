@@ -154,7 +154,7 @@ namespace Discussify.API.Controllers
             }
 
             var imageUrl = Url.Content($"~/Post/{uniqueFileName}");
-            post.ChangeImage(imageUrl);
+            post.ChangeImage(uniqueFileName);
 
             _postService.Save();
 
