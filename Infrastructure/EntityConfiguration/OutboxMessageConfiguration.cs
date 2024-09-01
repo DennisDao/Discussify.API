@@ -2,6 +2,8 @@
 using Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace Infrastructure.EntityConfiguration
 {
@@ -17,7 +19,6 @@ namespace Infrastructure.EntityConfiguration
 
                 outBoxconfiguration.Property(b => b.Id)
                     .HasMaxLength(200);
-
                 outBoxconfiguration.HasIndex("Id").IsUnique(true);
 
                 outBoxconfiguration.HasIndex(u => u.Type).HasDatabaseName("outbox_messages_IDX1");

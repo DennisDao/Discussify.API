@@ -23,10 +23,12 @@ namespace Infrastructure.Interceptors
             }
 
             var entities = dbContext.ChangeTracker
-               .Entries<IAggregateRoot>()
-               .Select(x => x.Entity);
+                            .Entries<IAggregateRoot>()
+                            .Where(x => (x.Entity as Entity)?.DomainEvents != null)
+                            .Select(x => x.Entity)
+                            .ToList();
 
-             var events = entities.SelectMany(aggregateRoot =>
+            var events = entities.SelectMany(aggregateRoot =>
                {
                    var entity = (aggregateRoot as Entity);
                    var domainEvents = entity?.DomainEvents;

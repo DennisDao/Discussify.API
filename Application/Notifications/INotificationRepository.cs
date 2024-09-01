@@ -11,5 +11,11 @@ namespace Application.Notifications
     {
         /// <summary> Get all notifcation for a user</summary>
         IEnumerable<Notification> GetNotifcations(int userId);
+
+        /// <summary>Add a notifcation </summary>
+        void AddNotification(Notification notification);
+
+        /// <summary>Commit the changes</summary>
+        void SaveChanges();
     }
 }

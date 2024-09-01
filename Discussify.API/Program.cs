@@ -4,6 +4,7 @@ using CommonDataContract;
 using Discussify.API.Service;
 using Domain.AggegratesModel.UserAggegrate;
 using Infrastructure;
+using Infrastructure.BackroundServices;
 using Infrastructure.Entities;
 using Infrastructure.Interceptors;
 using Infrastructure.Repositories;
@@ -80,7 +81,10 @@ builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<PostService>();
 builder.Services.AddScoped<NotificationService>();
 
+// Background Service
+builder.Services.AddHostedService<OutBoxMessageProcessor>();
 
+// Other services
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 var app = builder.Build();

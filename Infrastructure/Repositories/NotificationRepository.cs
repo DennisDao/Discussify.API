@@ -10,9 +10,20 @@ namespace Infrastructure.Repositories
         {
             _context = context;
         }
+
+        public void AddNotification(Notification notification)
+        {
+            _context.Notifications.Add(notification);
+        }
+
         public IEnumerable<Notification> GetNotifcations(int userId)
         {
             return _context.Notifications.Where(x => x.UserId == userId);
+        }
+
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
         }
     }
 }

@@ -62,11 +62,6 @@ namespace Discussify.API.Service
                 post.AddComment(comment);
                 context.Update(post);
                 context.SaveChanges();
-
-                // Adding notification 
-                var notification = Notification.Create(user.Id, "Tim commented on your post", "www.google.com");
-                context.Add(notification);
-                context.SaveChanges();
             }
 
             return app;

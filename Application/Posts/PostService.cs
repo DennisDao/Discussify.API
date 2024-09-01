@@ -35,7 +35,6 @@ namespace Application.Posts
                 .FirstOrDefault(x => x.Id == categoryId);
 
             var post = Post.Create(userId, title, description);
-            post.ChangeImage("");
             post.SetCategory(category);
 
             _postRepository.AddPost(post);
