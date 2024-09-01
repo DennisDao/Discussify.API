@@ -1,4 +1,5 @@
-﻿using Domain.SeedWork;
+﻿using Domain.AggegratesModel.PostAggegrate.Events;
+using Domain.SeedWork;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 
@@ -58,6 +59,12 @@ namespace Domain.AggegratesModel.PostAggegrate
         public void AddComment(Comment comment)
         {
             _comments.Add(comment);
+
+            CommentCreatedEvent commentCreated = new();
+            commentCreated.UserId = comment.UserId;
+            commentCreated.WhenCreated = DateTime.UtcNow;
+
+            AddDomainEvent(commentCreated);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Domain.SeedWork
     {
         private int? _requestedHashCode;
         private int _Id;
-        private List<INotification> _domainEvents;
+        private List<IDomainEvent> _domainEvents;
         public virtual int Id
         {
             get
@@ -18,16 +18,15 @@ namespace Domain.SeedWork
                 _Id = value;
             }
         }
-        public List<INotification> DomainEvents => _domainEvents;
-        public void AddDomainEvent(INotification eventItem)
+        public List<IDomainEvent> DomainEvents => _domainEvents;
+        public void AddDomainEvent(IDomainEvent eventItem)
         {
-            _domainEvents = _domainEvents ?? new List<INotification>();
+            _domainEvents = _domainEvents ?? new List<IDomainEvent>();
             _domainEvents.Add(eventItem);
         }
-        public void RemoveDomainEvent(INotification eventItem)
+        public void ClearDomainEvent() 
         {
-            if (_domainEvents is null) return;
-            _domainEvents.Remove(eventItem);
+            _domainEvents.Clear();
         }
         public bool IsTransient()
         {

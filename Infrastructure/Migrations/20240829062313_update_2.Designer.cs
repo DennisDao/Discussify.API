@@ -4,6 +4,7 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240829062313_update_2")]
+    partial class update_2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,9 +32,6 @@ namespace Infrastructure.Migrations
                 .IncrementsBy(10);
 
             modelBuilder.HasSequence("notifications_seq")
-                .IncrementsBy(10);
-
-            modelBuilder.HasSequence("outbox_messages_seq")
                 .IncrementsBy(10);
 
             modelBuilder.HasSequence("postseq")
@@ -323,40 +323,6 @@ namespace Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Infrastructure.Entities.OutboxMessage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(200)
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "outbox_messages_seq");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("WhenCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("WhenProcessed")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Id")
-                        .IsUnique();
-
-                    b.HasIndex("Type")
-                        .HasDatabaseName("outbox_messages_IDX1");
-
-                    b.ToTable("outbox_messages", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.RefreshToken", b =>

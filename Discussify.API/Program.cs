@@ -1,9 +1,11 @@
+using Application.Notifications;
 using Application.Posts;
 using CommonDataContract;
 using Discussify.API.Service;
 using Domain.AggegratesModel.UserAggegrate;
 using Infrastructure;
 using Infrastructure.Entities;
+using Infrastructure.Interceptors;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,8 +18,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("ApplicationConnectionString");
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlServer(connectionString));
+// Interceptors
+builder.Services.AddSingleton<DomainEventsInterceptor>();
+
+builder.Services.AddDbContext<ApplicationDbContext>((sp,options) =>
+{
+    var interceptor = sp.GetService<DomainEventsInterceptor>();
+    options.UseSqlServer(connectionString).AddInterceptors(interceptor);
+});
+       
 
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -62,9 +71,16 @@ builder.Services.AddCors(o => o.AddPolicy("AppPolicy", builder =>
     .AllowAnyHeader();
 }));
 
+// Repos
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+
+// Services
 builder.Services.AddScoped<PostService>();
+builder.Services.AddScoped<NotificationService>();
+
+
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 var app = builder.Build();
