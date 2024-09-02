@@ -18,9 +18,9 @@ namespace Application.Posts
             _postRepository = postRepository;
         }
 
-        public IEnumerable<Post> GetLatestPost()
+        public IEnumerable<Post> GetPost(int pageSize, int pageNumber)
         {
-            return _postRepository.GetLatestPost().ToList();
+            return _postRepository.GetPost(pageSize, pageNumber).ToList();
         }
 
         public IEnumerable<Post> GetPostByQuery(string query)
@@ -73,6 +73,11 @@ namespace Application.Posts
         public IEnumerable<Category> GetAllCategories()
         {
             return _postRepository.GetAllCategories().ToList();
+        }
+
+        public int GetTotalPost()
+        {
+            return _postRepository.GetTotalPost();
         }
 
         public void Save()

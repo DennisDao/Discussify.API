@@ -6,7 +6,6 @@ namespace Infrastructure.Repositories
 {
     public class PostRepository : IPostRepository
     {
-        private const int TAKE_LIMIT = 10;
         private readonly ApplicationDbContext _context;
 
         public PostRepository(ApplicationDbContext context)
@@ -30,14 +29,17 @@ namespace Infrastructure.Repositories
             return _context.Categories;
         }
 
-        public IEnumerable<Post> GetLatestPost()
+        public IEnumerable<Post> GetPost(int pageSize, int pageNumber)
         {
-            var post = _context.Posts
-                .Include(x => x.Tags)
-                .Include(x => x.Comments)
-                .Take(TAKE_LIMIT);
+            var posts = _context.Posts
+                  .Include(x => x.Tags)
+                  .Include(x => x.Comments)
+                  .OrderByDescending(x => x.WhenCreated) 
+                  .Skip((pageNumber - 1) * pageSize)
+                  .Take(pageSize)
+                  .ToList();
 
-            return post;
+            return posts;
         }
 
         public Post GetPostById(int postId)
@@ -50,6 +52,11 @@ namespace Infrastructure.Repositories
         public IEnumerable<Post> GetPostByQuery(string query)
         {
             return _context.Posts.Where(x => x.Title.StartsWith(query) || x.Title.Contains(query));
+        }
+
+        public int GetTotalPost()
+        {
+            return _context.Posts.Count();
         }
 
         public void SaveChanges()

@@ -25,12 +25,12 @@ namespace Discussify.API.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(int pageSize = 4, int pageNumber = 1)
         {
             List<PostListingResponse> postReponse = new List<PostListingResponse>();
             try
             {
-                var latestPost = _postService.GetLatestPost().OrderByDescending(x => x.WhenCreated);
+                var latestPost = _postService.GetPost(pageSize, pageNumber);
 
                 foreach (var post in latestPost)
                 {
@@ -61,6 +61,22 @@ namespace Discussify.API.Controllers
             }
 
             return Ok(postReponse);
+        }
+
+        [HttpGet("GetTotalPost")]
+        public async Task<IActionResult> GetTotalPost()
+        {
+            int totalPost;
+            try
+            {
+                totalPost = _postService.GetTotalPost();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Oops!");
+            }
+
+            return Ok(totalPost);
         }
 
         [HttpGet("{postId}")]
