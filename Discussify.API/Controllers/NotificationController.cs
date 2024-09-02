@@ -1,5 +1,6 @@
 ﻿using Application.Notifications;
 using Application.Posts;
+using CommonDataContract.Extension;
 using CommonDataContract.Post;
 using Discussify.API.DTOs.Notifications;
 using Microsoft.AspNetCore.Hosting.Server;
@@ -30,9 +31,12 @@ namespace Discussify.API.Controllers
                 {
                     var notificationResponse = new NotificationResponse()
                     {
+                        NotificationId = notification.Id,
                         UserId = notification.UserId,
                         Message = notification.Message,
                         Link = notification.Link,
+                        EntityId = notification.EntityId,
+                        NotificationType = notification.NotificationEntityType.GetDescription()
                     };
 
                     response.Add(notificationResponse);
@@ -44,6 +48,20 @@ namespace Discussify.API.Controllers
             }
 
             return Ok(response);
+        }
+
+        [HttpPost("SetViewed")]
+        public async Task<IActionResult> SetViewed(int notificationId)
+        {
+            try
+            {
+               _notifciationService.SetNotificationToViewed(notificationId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Oops!");
+            }
         }
     }
 }

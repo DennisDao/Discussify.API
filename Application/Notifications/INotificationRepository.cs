@@ -12,6 +12,9 @@ namespace Application.Notifications
         /// <summary> Get all notifcation for a user</summary>
         IEnumerable<Notification> GetNotifcations(int userId);
 
+        /// <summary> Get notifcation by Id</summary>
+        Notification GetNotifcationById(int notifcationId);
+
         /// <summary>Add a notifcation </summary>
         void AddNotification(Notification notification);
 

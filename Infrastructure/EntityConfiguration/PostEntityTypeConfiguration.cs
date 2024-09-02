@@ -21,7 +21,7 @@ namespace Infrastructure.EntityConfiguration
             postConfiguration.Ignore(b => b.DomainEvents);
 
             postConfiguration.Property(b => b.Id)
-                .UseHiLo("postseq");
+                .UseHiLo("postseq").ValueGeneratedOnAdd();
 
             postConfiguration.Property(b => b.Id)
                 .HasMaxLength(200);

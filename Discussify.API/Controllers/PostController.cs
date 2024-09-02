@@ -86,7 +86,7 @@ namespace Discussify.API.Controllers
                     postComment.UserId = c.UserId;
                     postComment.AuthorName = author.FirstName;
                     postComment.WhenCreated = c.WhenCreated.ToElaspedTime(); ;
-                    postComment.AuthorImageUrl = $"{_server.GetHostUrl()}{author.Avatar}";
+                    postComment.AuthorImageUrl = $"{_server.GetHostUrl()}/Avatars/{author.Avatar}";
                     postComment.Content = c.Content;
 
                     postResponse.Comments.Add(postComment);
@@ -123,13 +123,6 @@ namespace Discussify.API.Controllers
                 return BadRequest(new { Message = "Unable to add comment" });
             }
         }
-
-        //[HttpPost("SetTags")]
-        //public async Task<IActionResult> SetTag([FromBody] PostCreateRequest request)
-        //{
-        //    _postService.CreatePost(request.UserId, request.Title, request.Description);
-        //    return Ok();
-        //}
 
         [HttpPost("UploadImage")]
         public async Task<IActionResult> UploadImage(IFormFile image, int postId)
