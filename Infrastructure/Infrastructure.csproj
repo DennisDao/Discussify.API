@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
-    <ProjectReference Include="..\CommonDataContract\CommonDataContract.csproj" />
+    <ProjectReference Include="..\CommonDataContract\Common.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 

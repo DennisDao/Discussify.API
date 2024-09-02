@@ -1,9 +1,8 @@
-﻿using Application.Posts;
+﻿using Api.DTOs.Post;
+using Application.Posts;
 using CommonDataContract.Extension;
-using CommonDataContract.Post;
 using Discussify.API.DTOs.Post;
 using Discussify.API.Extensions;
-using Domain.AggegratesModel.PostAggegrate;
 using Domain.AggegratesModel.UserAggegrate;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;

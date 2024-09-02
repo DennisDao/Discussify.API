@@ -1,10 +1,6 @@
 ﻿using Application.Notifications;
-using Application.Posts;
 using CommonDataContract.Extension;
-using CommonDataContract.Post;
 using Discussify.API.DTOs.Notifications;
-using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Discussify.API.Controllers

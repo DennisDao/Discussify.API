@@ -1,5 +1,4 @@
-﻿
-namespace CommonDataContract.Post
+﻿namespace Api.DTOs.Post
 {
     public class PostListingResponse
     {
@@ -25,7 +24,7 @@ namespace CommonDataContract.Post
 
         public int TotalComments { get; set; }
 
-        public int TotalLikes { get; set;}
+        public int TotalLikes { get; set; }
 
         public string WhenCreated { get; set; }
     }

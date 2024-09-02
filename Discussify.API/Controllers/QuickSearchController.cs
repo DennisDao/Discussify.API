@@ -1,9 +1,8 @@
-﻿using Application.Posts;
-using CommonDataContract.Post;
+﻿using Api.DTOs.Post;
+using Application.Posts;
 using Discussify.API.Extensions;
 using Domain.AggegratesModel.UserAggegrate;
 using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Discussify.API.Controllers
@@ -13,12 +12,10 @@ namespace Discussify.API.Controllers
     public class QuickSearchController : ControllerBase
     {
         private readonly PostService _postService;
-        private readonly IUserRepository _userRepository;
         private readonly IServer _server;
-        public QuickSearchController(PostService postService, IUserRepository userRepository, IServer server)
+        public QuickSearchController(PostService postService, IServer server)
         {
             _postService = postService;
-            _userRepository = userRepository;
             _server = server;
         }
 
