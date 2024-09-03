@@ -1,4 +1,5 @@
 ﻿using Domain.AggegratesModel.PostAggegrate.Events;
+using Domain.AggegratesModel.PostAggegrate.Exceptions;
 using Domain.SeedWork;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
@@ -9,9 +10,7 @@ namespace Domain.AggegratesModel.PostAggegrate
     public class Post : Entity, IAggregateRoot
     {
         private readonly List<Tag> _tags = new List<Tag>();
-
         private readonly List<Comment> _comments = new List<Comment>();
-
         public int UserId { get; private set; }
         public string Title { get; private set; }
         public string Description { get; private set; }
@@ -66,6 +65,24 @@ namespace Domain.AggegratesModel.PostAggegrate
             commentCreated.PostId = Id;
 
             AddDomainEvent(commentCreated);
+        }
+
+        public void Validate()
+        {
+            if(UserId is 0)
+            {
+                throw new PostInvalidStateException("Invalid user Id");
+            }
+
+            if (string.IsNullOrEmpty(Title))
+            {
+                throw new PostInvalidStateException("Title cannot be empty");
+            }
+
+            if (string.IsNullOrEmpty(Description))
+            {
+                throw new PostInvalidStateException("Description cannot be empty");
+            }
         }
     }
 }

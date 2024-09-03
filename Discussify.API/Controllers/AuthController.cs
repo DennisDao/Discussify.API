@@ -1,9 +1,9 @@
-﻿using Domain.Exception;
-using Discussify.API.Models;
+﻿using Discussify.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Hosting.Server;
 using Discussify.API.Extensions;
+using Domain.AggegratesModel.UserAggegrate.DomainException;
 
 namespace Discussify.API.Controllers
 {

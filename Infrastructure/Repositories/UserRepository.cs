@@ -1,8 +1,7 @@
 ﻿using Domain.AggegratesModel.UserAggegrate;
-using Domain.Exception;
+using Domain.AggegratesModel.UserAggegrate.DomainException;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
