@@ -56,6 +56,11 @@ namespace Infrastructure.Repositories
                 .Where(x => x.Title.StartsWith(query) || x.Title.Contains(query) || x.Tags.Any(x => x.Name == query));
         }
 
+        public IEnumerable<Post> GetPostByUserId(int userId)
+        {
+            return _context.Posts.Where(x => x.UserId == userId);
+        }
+
         public int GetTotalPost()
         {
             return _context.Posts.Count();

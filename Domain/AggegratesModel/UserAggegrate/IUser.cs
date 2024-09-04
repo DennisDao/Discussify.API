@@ -7,8 +7,9 @@ namespace Domain.AggegratesModel.UserAggegrate
         int Id { get; }
         string FirstName { get; }
         string LastName { get; }
-        string Avatar { get; }
+        string? Avatar { get; }
         string Email { get; }
+        string? Bio { get; }
         DateTime WhenCreated { get; }
         DateTime WhenUpdated { get; }
     }

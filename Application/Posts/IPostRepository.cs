@@ -10,6 +10,9 @@ namespace Application.Posts
         /// <summary> Returns all post that match the search query </summary>
         IEnumerable<Post> GetPostByQuery(string query);
 
+        /// <summary> Returns all post for a user </summary>
+        IEnumerable<Post> GetPostByUserId(int userId);
+
         /// <summary> Returns the total of post</summary>
         int GetTotalPost();
 

@@ -28,6 +28,11 @@ namespace Application.Posts
             return _postRepository.GetPostByQuery(query).ToList();
         }
 
+        public IReadOnlyList<Post> GetPostByUserId(int userId)
+        {
+            return _postRepository.GetPostByUserId(userId).ToList();
+        }
+
         public Post CreatePost(int userId, string title, string description, int categoryId, string[] tags)
         {
             var category = _postRepository

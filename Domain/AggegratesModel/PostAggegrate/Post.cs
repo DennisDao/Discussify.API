@@ -3,6 +3,7 @@ using Domain.AggegratesModel.PostAggegrate.Exceptions;
 using Domain.SeedWork;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 
 namespace Domain.AggegratesModel.PostAggegrate
@@ -40,23 +41,43 @@ namespace Domain.AggegratesModel.PostAggegrate
 
         public void ChangeImage(string image)
         {
+            if(string.IsNullOrEmpty(image))
+            {
+                throw new PostInvalidStateException("Image is empty");
+            }
+
             Image = image;
             WhenUpdated = DateTime.UtcNow;
         }
 
         public void SetCategory(Category category)
         {
+            if (category is null)
+            {
+                throw new PostInvalidStateException("Category is empty");
+            }
+
             Category = category;
             WhenUpdated = DateTime.UtcNow;
         }
 
         public void AddTags(Tag tag)
         {
+            if (tag is null)
+            {
+                throw new PostInvalidStateException("Tag is empty");
+            }
+
             _tags.Add(tag);
         }
 
         public void AddComment(Comment comment)
         {
+            if (comment is null)
+            {
+                throw new PostInvalidStateException("Comment is empty");
+            }
+
             _comments.Add(comment);
 
             CommentCreatedEvent commentCreated = new();

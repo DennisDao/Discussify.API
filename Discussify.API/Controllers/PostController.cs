@@ -114,8 +114,36 @@ namespace Discussify.API.Controllers
             {
                 return BadRequest("Oops!");
             }
+        }
 
-            return Ok(null);
+        [HttpGet("User/{userId}")]
+        public async Task<IActionResult> GetPostByUserId(int userId)
+        {
+
+            List<PostResponse> response = new List<PostResponse>();
+            try
+            {
+                var posts = _postService.GetPostByUserId(userId);
+
+                foreach (var post in posts)
+                {
+                    PostResponse postResponse = new PostResponse();
+                    postResponse.UserId = post.UserId;
+                    postResponse.PostId = post.Id;
+                    postResponse.Title = post.Title;
+                    postResponse.Description = post.Description;
+                    postResponse.ImageUrl = $"{_server.GetHostUrl()}/post/{post.Image}";
+                    postResponse.WhenCreated = post.WhenCreated.ToElaspedTime();
+
+                    response.Add(postResponse);
+                }
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Oops!");
+            }
         }
 
         [HttpPost("")]

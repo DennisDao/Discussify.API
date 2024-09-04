@@ -14,6 +14,8 @@
 
         public List<PostComment> Comments { get; set; } = new List<PostComment>();
 
+        public string WhenCreated { get; set; }
+
     }
 
     public class PostComment
