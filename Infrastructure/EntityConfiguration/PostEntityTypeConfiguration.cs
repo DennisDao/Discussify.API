@@ -20,14 +20,11 @@ namespace Infrastructure.EntityConfiguration
 
             postConfiguration.Ignore(b => b.DomainEvents);
 
-            postConfiguration.Property(b => b.Id)
-                .UseHiLo("postseq").ValueGeneratedOnAdd();
+            postConfiguration.HasKey(p => p.Id);
 
-            postConfiguration.Property(b => b.Id)
-                .HasMaxLength(200);
+            postConfiguration.Property(b => b.Id).ValueGeneratedOnAdd();
 
-            postConfiguration.HasIndex("Id")
-                .IsUnique(true);
+            postConfiguration.Property(b => b.Id).HasMaxLength(200);
 
             // Junction table
             postConfiguration.HasMany(s => s.Tags)

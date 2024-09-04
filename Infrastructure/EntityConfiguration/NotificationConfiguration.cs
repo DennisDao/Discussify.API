@@ -13,8 +13,7 @@ namespace Infrastructure.EntityConfiguration
 
             notificationConfiguration.Ignore(b => b.DomainEvents);
 
-            notificationConfiguration.Property(b => b.Id)
-                .UseHiLo("notifications_seq");
+            notificationConfiguration.Property(b => b.Id).ValueGeneratedOnAdd();
 
             notificationConfiguration.Property(b => b.Id)
                 .HasMaxLength(200);

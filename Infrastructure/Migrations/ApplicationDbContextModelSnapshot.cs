@@ -25,18 +25,6 @@ namespace Infrastructure.Migrations
             modelBuilder.HasSequence("categories_seq")
                 .IncrementsBy(10);
 
-            modelBuilder.HasSequence("comment_seq")
-                .IncrementsBy(10);
-
-            modelBuilder.HasSequence("notifications_seq")
-                .IncrementsBy(10);
-
-            modelBuilder.HasSequence("outbox_messages_seq")
-                .IncrementsBy(10);
-
-            modelBuilder.HasSequence("postseq")
-                .IncrementsBy(10);
-
             modelBuilder.Entity("Domain.AggegratesModel.NotificationAggegrate.Notification", b =>
                 {
                     b.Property<int>("Id")
@@ -44,7 +32,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "notifications_seq");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("EntityId")
                         .HasColumnType("int");
@@ -123,7 +111,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "comment_seq");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -161,7 +149,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "postseq");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -189,9 +177,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("Id")
-                        .IsUnique();
 
                     b.ToTable("posts", (string)null);
                 });
@@ -339,7 +324,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "outbox_messages_seq");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
                         .IsRequired()

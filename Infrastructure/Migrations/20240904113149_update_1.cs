@@ -15,14 +15,6 @@ namespace Infrastructure.Migrations
                 name: "categories_seq",
                 incrementBy: 10);
 
-            migrationBuilder.CreateSequence(
-                name: "comment_seq",
-                incrementBy: 10);
-
-            migrationBuilder.CreateSequence(
-                name: "postseq",
-                incrementBy: 10);
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -47,9 +39,10 @@ namespace Infrastructure.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Avatar = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     WhenCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     WhenUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -84,6 +77,22 @@ namespace Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "outbox_messages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", maxLength: 200, nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WhenCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    WhenProcessed = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_outbox_messages", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -206,6 +215,32 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "notifications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", maxLength: 200, nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsViewed = table.Column<bool>(type: "bit", nullable: false),
+                    Link = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EntityId = table.Column<int>(type: "int", nullable: false),
+                    NotificationEntityType = table.Column<int>(type: "int", nullable: false),
+                    WhenCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    WhenUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_notifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_notifications_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RefreshTokens",
                 columns: table => new
                 {
@@ -233,11 +268,12 @@ namespace Infrastructure.Migrations
                 name: "posts",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", maxLength: 200, nullable: false),
+                    Id = table.Column<int>(type: "int", maxLength: 200, nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhenCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     WhenUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false)
@@ -257,7 +293,8 @@ namespace Infrastructure.Migrations
                 name: "comments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", maxLength: 200, nullable: false),
+                    Id = table.Column<int>(type: "int", maxLength: 200, nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     PostId = table.Column<int>(type: "int", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -351,6 +388,28 @@ namespace Infrastructure.Migrations
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_notifications_Id",
+                table: "notifications",
+                column: "Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_notifications_UserId",
+                table: "notifications",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_outbox_messages_Id",
+                table: "outbox_messages",
+                column: "Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "outbox_messages_IDX1",
+                table: "outbox_messages",
+                column: "Type");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_post_tags_TagsId",
                 table: "post_tags",
                 column: "TagsId");
@@ -359,12 +418,6 @@ namespace Infrastructure.Migrations
                 name: "IX_posts_CategoryId",
                 table: "posts",
                 column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_posts_Id",
-                table: "posts",
-                column: "Id",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokens_UserId",
@@ -394,6 +447,12 @@ namespace Infrastructure.Migrations
                 name: "comments");
 
             migrationBuilder.DropTable(
+                name: "notifications");
+
+            migrationBuilder.DropTable(
+                name: "outbox_messages");
+
+            migrationBuilder.DropTable(
                 name: "post_tags");
 
             migrationBuilder.DropTable(
@@ -416,12 +475,6 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropSequence(
                 name: "categories_seq");
-
-            migrationBuilder.DropSequence(
-                name: "comment_seq");
-
-            migrationBuilder.DropSequence(
-                name: "postseq");
         }
     }
 }

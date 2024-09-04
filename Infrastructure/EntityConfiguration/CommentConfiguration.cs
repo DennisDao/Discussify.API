@@ -13,14 +13,13 @@ namespace Infrastructure.EntityConfiguration
 
             commentConfiguration.Ignore(b => b.DomainEvents);
 
-            commentConfiguration.Property(b => b.Id)
-                .UseHiLo("comment_seq");
+            commentConfiguration.Property(b => b.Id).ValueGeneratedOnAdd();
 
             commentConfiguration.Property(b => b.Id)
                 .HasMaxLength(200);
 
-            commentConfiguration.HasIndex("Id")
-            .IsUnique(true);
+            commentConfiguration.HasIndex("Id").IsUnique(true);
+
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Infrastructure.EntityConfiguration
 
             tagConfiguration.Ignore(b => b.DomainEvents);
 
-            tagConfiguration.Property(b => b.Id).UseHiLo("tag_seq");
+            tagConfiguration.Property(b => b.Id).ValueGeneratedOnAdd();
 
             tagConfiguration.Property(b => b.Id).HasMaxLength(200);
         }
