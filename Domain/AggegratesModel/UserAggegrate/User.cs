@@ -43,5 +43,10 @@ namespace Domain.AggegratesModel.UserAggegrate
                 WhenCreated = user.WhenUpdated,
             };
         }
+
+        public void ChangeFirstName(string firstName)
+        {
+            FirstName = firstName;
+        }
     }
 }

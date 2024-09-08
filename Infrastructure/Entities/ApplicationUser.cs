@@ -31,9 +31,35 @@ namespace Infrastructure.Entities
         public void ChangeAvatar(string avatar)
         {
             Avatar = avatar;
+            WhenUpdated = DateTime.UtcNow;
         }
 
-        public static User ToDomainUser(IUser user)
+        public void ChangeFirstName(string firstName)
+        {
+            FirstName = firstName;
+            WhenUpdated = DateTime.UtcNow;
+        }
+
+        public void ChangeLastName(string lastName)
+        {
+            LastName = lastName;
+            WhenUpdated = DateTime.UtcNow;
+        }
+
+        public void ChangeEmail(string email)
+        {
+            Email = email;
+            WhenUpdated = DateTime.UtcNow;
+        }
+
+        public void ChangeBio(string bio)
+        {
+            Bio = bio;
+            WhenUpdated = DateTime.UtcNow;
+        }
+
+
+        public User ToDomainUser(IUser user)
         {
             return User.Create(user);
         }

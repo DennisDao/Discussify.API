@@ -1,4 +1,5 @@
-﻿using Discussify.API.Extensions;
+﻿using Api.DTOs.Users;
+using Discussify.API.Extensions;
 using Discussify.API.Models;
 using Domain.AggegratesModel.UserAggegrate;
 using Infrastructure.Entities;
@@ -14,14 +15,16 @@ namespace Discussify.API.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IUserRepository _userRepository;
         private readonly IServer _server;
 
-        public AccountsController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IServer server)
+        public AccountsController(UserManager<ApplicationUser> userManager,
+            IServer server, 
+            IUserRepository userRepository)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _server = server;
+            _userRepository = userRepository;
         }
 
         [HttpPost("register")]
@@ -45,6 +48,38 @@ namespace Discussify.API.Controllers
             }
 
             return BadRequest(ModelState);
+        }
+
+        [HttpGet("UserDetails")]
+        public async Task<IActionResult> UserDetails(int userId)
+        {
+
+            var user = await _userRepository.GetUserByIdAsync(userId);
+
+            if(user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            var dto = user.ToUserDetailResponse(_server);
+
+            return Ok(dto);
+        }
+
+        [HttpPost("UpdateUserDetail")]
+        public async Task<IActionResult> UserDetails([FromBody] UpdateUserDetailRequest request)
+        {
+
+            var user = await _userRepository.GetUserByIdAsync(request.UserId) as ApplicationUser;
+            user.ChangeFirstName(request.FirstName);
+            user.ChangeLastName(request.LastName);
+            user.ChangeBio(request.Bio);
+            user.ChangeEmail(request.Email);
+            user.UserName = request.Email;
+
+            await _userManager.UpdateAsync(user);
+
+            return Ok();
         }
 
         [HttpPost("avatar")]
@@ -72,7 +107,7 @@ namespace Discussify.API.Controllers
             user.ChangeAvatar(avatar);
             await _userManager.UpdateAsync(user);
 
-            var avatarUrl = @"{_server.GetHostUrl()}/Avatars/{avatar}";
+            var avatarUrl = $"{_server.GetHostUrl()}/Avatars/{avatar}";
 
             return Ok(new { avatarUrl });
         }
