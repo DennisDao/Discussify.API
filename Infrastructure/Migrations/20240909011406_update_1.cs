@@ -215,6 +215,31 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "followers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", maxLength: 200, nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FollowerUserId = table.Column<int>(type: "int", nullable: false),
+                    FollowingUserId = table.Column<int>(type: "int", nullable: false),
+                    WhenCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_followers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_followers_AspNetUsers_FollowerUserId",
+                        column: x => x.FollowerUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_followers_AspNetUsers_FollowingUserId",
+                        column: x => x.FollowingUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "notifications",
                 columns: table => new
                 {
@@ -388,6 +413,22 @@ namespace Infrastructure.Migrations
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_followers_FollowerUserId",
+                table: "followers",
+                column: "FollowerUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_followers_FollowingUserId",
+                table: "followers",
+                column: "FollowingUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_followers_Id",
+                table: "followers",
+                column: "Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_notifications_Id",
                 table: "notifications",
                 column: "Id",
@@ -445,6 +486,9 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "comments");
+
+            migrationBuilder.DropTable(
+                name: "followers");
 
             migrationBuilder.DropTable(
                 name: "notifications");

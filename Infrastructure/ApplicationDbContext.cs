@@ -1,4 +1,5 @@
-﻿using Domain.AggegratesModel.NotificationAggegrate;
+﻿using Domain.AggegratesModel.FollowerAggegrate;
+using Domain.AggegratesModel.NotificationAggegrate;
 using Domain.AggegratesModel.PostAggegrate;
 using Infrastructure.Entities;
 using Infrastructure.EntityConfiguration;
@@ -17,6 +18,7 @@ namespace Infrastructure
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Follower> Followers { get; set; }
         public DbSet<OutboxMessage> OutBoxMessages { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
@@ -32,6 +34,7 @@ namespace Infrastructure
             modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
+            modelBuilder.ApplyConfiguration(new FollowerConfiguration());
             base.OnModelCreating(modelBuilder);
         }
 

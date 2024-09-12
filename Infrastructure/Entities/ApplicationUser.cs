@@ -14,6 +14,7 @@ namespace Infrastructure.Entities
         public DateTime WhenCreated { get; private set; }
         public DateTime WhenUpdated { get; private set; }
         public string? Bio { get; private set; }
+
         public static ApplicationUser Create(string firstName, string lastName, string email)
         {
             return new ApplicationUser() 
@@ -58,10 +59,15 @@ namespace Infrastructure.Entities
             WhenUpdated = DateTime.UtcNow;
         }
 
-
         public User ToDomainUser(IUser user)
         {
             return User.Create(user);
         }
+
+        //public void AddFollower(IUser user)
+        //{
+        //    var follower = Follower.Create(user.Id, this.Id);
+        //    Followers.Add(follower);
+        //}
     }
 }

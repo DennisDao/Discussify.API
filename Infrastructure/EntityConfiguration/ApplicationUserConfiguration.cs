@@ -18,6 +18,7 @@ namespace Infrastructure.EntityConfiguration
         {
             // Primary key
             builder.HasKey(x => x.Id);
+
         }
     }
 }

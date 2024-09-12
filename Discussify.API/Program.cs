@@ -1,3 +1,4 @@
+using Application.Followers;
 using Application.Notifications;
 using Application.Posts;
 using CommonDataContract;
@@ -76,6 +77,7 @@ builder.Services.AddCors(o => o.AddPolicy("AppPolicy", builder =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<IFollowerRepository, FolloweRepository>();
 
 // Services
 builder.Services.AddScoped<PostService>();

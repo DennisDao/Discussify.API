@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240904113149_update_1")]
+    [Migration("20240909011406_update_1")]
     partial class update_1
     {
         /// <inheritdoc />
@@ -27,6 +27,36 @@ namespace Infrastructure.Migrations
 
             modelBuilder.HasSequence("categories_seq")
                 .IncrementsBy(10);
+
+            modelBuilder.Entity("Domain.AggegratesModel.FollowerAggegrate.Follower", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(200)
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("FollowerUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FollowingUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("WhenCreated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FollowerUserId");
+
+                    b.HasIndex("FollowingUserId");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    b.ToTable("followers", (string)null);
+                });
 
             modelBuilder.Entity("Domain.AggegratesModel.NotificationAggegrate.Notification", b =>
                 {
@@ -505,6 +535,21 @@ namespace Infrastructure.Migrations
                     b.HasIndex("TagsId");
 
                     b.ToTable("post_tags", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.AggegratesModel.FollowerAggegrate.Follower", b =>
+                {
+                    b.HasOne("Infrastructure.Entities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("FollowerUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Infrastructure.Entities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("FollowingUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.AggegratesModel.NotificationAggegrate.Notification", b =>

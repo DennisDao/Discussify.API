@@ -12,5 +12,7 @@ namespace Domain.AggegratesModel.UserAggegrate
         string? Bio { get; }
         DateTime WhenCreated { get; }
         DateTime WhenUpdated { get; }
+        //void AddFollower(IUser user);
+        //void AddFollowing(IUser user);
     }
 }

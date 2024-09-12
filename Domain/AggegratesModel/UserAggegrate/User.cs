@@ -1,4 +1,6 @@
-﻿using Domain.SeedWork;
+﻿using Domain.AggegratesModel.FollowerAggegrate;
+using Domain.AggegratesModel.PostAggegrate;
+using Domain.SeedWork;
 
 namespace Domain.AggegratesModel.UserAggegrate
 {
@@ -15,7 +17,7 @@ namespace Domain.AggegratesModel.UserAggegrate
 
         private User()
         {
-                
+
         }
 
         public static User Create(string firstName, string lastName, string email)
