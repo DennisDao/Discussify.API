@@ -16,5 +16,9 @@
         public string Bio { get; set; }
 
         public bool IsFollowing { get; set; }
+
+        public int TotalFollowers { get; set; }
+
+        public int TotalPost { get; set; }
     }
 }

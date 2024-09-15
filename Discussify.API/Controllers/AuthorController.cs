@@ -22,11 +22,16 @@ namespace Api.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IFollowerRepository _followerRepository;
+        private readonly IPostRepository _postRepository;
         private readonly IServer _server;
-        public AuthorController(IUserRepository userRepository, IFollowerRepository followerRepository, IServer server)
+        public AuthorController(IUserRepository userRepository,
+            IFollowerRepository followerRepository,
+            IPostRepository postRepository,
+            IServer server)
         {
             _userRepository = userRepository;
             _followerRepository = followerRepository;
+            _postRepository = postRepository;
             _server = server;
         }
 
@@ -44,6 +49,9 @@ namespace Api.Controllers
 
                 foreach (var user in users)
                 {
+                    var followers = _followerRepository.GetFollowers(user.Id);
+                    var totalPost = _postRepository.GetPostByUserId(user.Id).Count();
+
                     AuthorResponse author = new AuthorResponse();
                     author.UserId = user.Id;
                     author.Picture = $"{_server.GetHostUrl()}/Avatars/{user.Avatar}";
@@ -51,7 +59,9 @@ namespace Api.Controllers
                     author.LastName = user.LastName;
                     author.Email = user.Email;
                     author.Bio = user.Bio;
-                    author.IsFollowing = following.Any(x => x.FollowingUserId == user.Id);    
+                    author.IsFollowing = following.Any(x => x.FollowingUserId == user.Id);  
+                    author.TotalFollowers = followers.Count();
+                    author.TotalPost = totalPost;
 
                     authorReponse.Add(author);
                 }
@@ -64,12 +74,10 @@ namespace Api.Controllers
             return Ok(authorReponse);
         }
 
-        [HttpGet("FollowingAuthors")]
-        public async Task<IActionResult> GetFollowingAuthors()
+        [HttpGet("Following")]
+        public async Task<IActionResult> Following(int userId)
         {
             List<FollowAuthorResponse> response = new List<FollowAuthorResponse>();
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
             var followings = _followerRepository.GetFollowing(userId);
 
             try
@@ -77,6 +85,8 @@ namespace Api.Controllers
                 foreach (var following in followings)
                 {
                     var user = await _userRepository.GetUserByIdAsync(following.FollowingUserId);
+                    var followers = _followerRepository.GetFollowers(user.Id);
+                    var totalPost = _postRepository.GetPostByUserId(user.Id).Count();
 
                     FollowAuthorResponse author = new FollowAuthorResponse();
                     author.UserId = user.Id;
@@ -87,6 +97,45 @@ namespace Api.Controllers
                     author.Bio = user.Bio;
                     author.IsFollowing = true;
                     author.FollowerId = following.Id;
+                    author.TotalFollowers = followers.Count();
+                    author.TotalPost = totalPost;
+
+                    response.Add(author);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Oops!");
+            }
+
+            return Ok(response);
+        }
+
+        [HttpGet("Followers")]
+        public async Task<IActionResult> Followers(int userId)
+        {
+            List<FollowAuthorResponse> response = new List<FollowAuthorResponse>();
+            var followers = _followerRepository.GetFollowers(userId);
+
+            try
+            {
+                foreach (var follower in followers)
+                {
+                    var user = await _userRepository.GetUserByIdAsync(follower.FollowerUserId);
+                    var totalFollower = _followerRepository.GetFollowers(userId).Count();
+                    var totalPost = _postRepository.GetPostByUserId(follower.FollowerUserId).Count();
+
+                    FollowAuthorResponse author = new FollowAuthorResponse();
+                    author.UserId = user.Id;
+                    author.Picture = $"{_server.GetHostUrl()}/Avatars/{user.Avatar}";
+                    author.FirstName = user.FirstName;
+                    author.LastName = user.LastName;
+                    author.Email = user.Email;
+                    author.Bio = user.Bio;
+                    author.IsFollowing = true;
+                    author.FollowerId = follower.Id;
+                    author.TotalFollowers = followers.Count();
+                    author.TotalPost = totalPost;
 
                     response.Add(author);
                 }
@@ -146,6 +195,7 @@ namespace Api.Controllers
                     author.FirstName = user.FirstName;
                     author.LastName = user.LastName;
                     author.Email = user.Email;
+                    author.Bio = user.Bio;
 
                     authorReponse.Add(author);
                 }

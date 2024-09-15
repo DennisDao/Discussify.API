@@ -56,7 +56,7 @@ namespace Infrastructure.BackroundServices
                             foreach (var userId in userIds)
                             {
                                 var user = await userRepo.GetUserByIdAsync(commentCreated.UserId);
-                                var notification = Notification.Create(userId, $"{user.FirstName} commented {post.Title}", "", NotificationEntityType.Post, post.Id);
+                                var notification = Notification.Create(userId, $"{user.FirstName} commented on {post.Title}", "", NotificationEntityType.Post, post.Id);
                                 notificationService.AddNotification(notification);
                             }
 
