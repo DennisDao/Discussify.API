@@ -6,6 +6,7 @@ using Infrastructure.EntityConfiguration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
+
 // dotnet ef migrations add update_1 --verbose --project Infrastructure --startup-project Discussify.API
 // dotnet ef database update --project Infrastructure --startup-project Discussify.API
 namespace Infrastructure
@@ -20,6 +21,7 @@ namespace Infrastructure
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Follower> Followers { get; set; }
         public DbSet<OutboxMessage> OutBoxMessages { get; set; }
+        public DbSet<Domain.AggegratesModel.ActivityAggegrate.Activity> Activites { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -35,6 +37,7 @@ namespace Infrastructure
             modelBuilder.ApplyConfiguration(new CategoryEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
             modelBuilder.ApplyConfiguration(new FollowerConfiguration());
+            modelBuilder.ApplyConfiguration(new ActivityConfiguration());
             base.OnModelCreating(modelBuilder);
         }
 

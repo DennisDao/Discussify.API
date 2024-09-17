@@ -1,3 +1,4 @@
+using Application.Activites;
 using Application.Followers;
 using Application.Notifications;
 using Application.Posts;
@@ -78,10 +79,13 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IFollowerRepository, FolloweRepository>();
+builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 
 // Services
 builder.Services.AddScoped<PostService>();
 builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<ICommentCreatedProcessor, ActivityCommentCreatedProcessor>();
+builder.Services.AddScoped<ICommentCreatedProcessor, NotificationProcessor>();
 
 // Background Service
 builder.Services.AddHostedService<OutBoxMessageProcessor>();

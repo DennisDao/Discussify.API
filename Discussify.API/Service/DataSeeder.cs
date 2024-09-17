@@ -79,38 +79,6 @@ namespace Discussify.API.Service
                     context.Add(post);
                     context.SaveChanges();
                 }
-
-
-                //var post = Post.Create(user.Id, "AI Age", "Will AI replace software engineer");
-                //post.ChangeImage("Screenshot 2024-04-26 170004.png");
-                //post.SetCategory(category1);
-                //context.Add(post);
-                //context.SaveChanges();
-
-                //post.AddTags(tag1);
-                //post.AddTags(tag2);
-
-                //context.Update(post);
-                //context.SaveChanges();
-
-                //string jsonString = "[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]";
-
-                //var comment = Comment.Create(user.Id, post.Id, jsonString);
-
-                //post.AddComment(comment);
-                //context.Update(post);
-                //context.SaveChanges();
-
-                //try
-                //{
-                //    var follower = Follower.Follow(user.Id, user2.Id);
-                //    context.Followers.Add(follower);
-                //    context.SaveChanges();
-                //}
-                //catch (Exception ex)
-                //{
-                //    Console.WriteLine(ex.Message);
-                //}
             }
 
             return app;
